@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.tfriends.mapper.WeatherMapper">
+	<select id="counttown" resultType="int">
+		SELECT COUNT(no) FROM dominications
+	</select>
+	<select id="locationinfo" resultType="LocationVO">
+		SELECT location, lat, lon FROM dominications where no = #{no}
+	</select>
+	<select id="WeatherLoad" resultType="WeatherVO">
+		SELECT * FROM dominications
+		WHERE no = #{no}
+	</select>
+	<update id="weatherupdate">
+		UPDATE dominications SET
+			sunrise = #{sunrise},
+			sunset = #{sunset},
+			weather0 = #{weather0},
+			temp0 = #{temp0},
+			humid0 = #{humid0},
+			weather1 = #{weather1},
+			temp1 = #{temp1},
+			time1 = #{time1},
+			weather2 = #{weather2},
+			temp2 = #{temp2},
+			time2 = #{time2},
+			weather3 = #{weather3},
+			temp3 = #{temp3},
+			time3 = #{time3},
+			weather4 = #{weather4},
+			temp4 = #{temp4},
+			time4 = #{time4},
+			weather5 = #{weather5},
+			temp5 = #{temp5},
+			time5 = #{time5}
+			where location = #{location}
+	</update>
+
+	<select id="stationno" resultType="DustStationVO">
+		SELECT * FROM dust_station WHERE no = #{no}
+	</select>
+	<update id="stationup">
+		UPDATE dust_station SET
+			pm10v = #{pm10v},
+			pm10g = #{pm10g},
+			pm25v = #{pm25v},
+			pm25g = #{pm25g}
+		WHERE no = #{no}
+	</update>
+</mapper>

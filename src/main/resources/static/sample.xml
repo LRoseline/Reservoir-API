@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <header>
+        <resultCode>0000</resultCode>
+        <resultMsg>OK</resultMsg>
+    </header>
+    <item>
+        <fac_code>4423010045</fac_code>
+        <fac_name>탑정</fac_name>
+        <county>충청남도 논산시</county>
+        <check_date>20150901</check_date>
+        <water_level>25.32</water_level>
+        <rate>35.3</rate>
+    </item>
+    <numOfRows>30</numOfRows>
+    <pageNo>1</pageNo>
+    <totalCount>30</totalCount>
+</response>
