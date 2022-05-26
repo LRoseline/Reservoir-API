@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 import com.tfriends.domain.DustStationVO;
 import com.tfriends.domain.WeatherVO;
@@ -24,7 +22,7 @@ public class WeatherSync {
 
     @Scheduled(cron = "5 1 * * * *")
     public void WeatherRain() throws Exception {
-        SimpleDateFormat dtformat = new SimpleDateFormat("YYYY-MM-dd a hh:mm", Locale.KOREA);
+        // SimpleDateFormat dtformat = new SimpleDateFormat("YYYY-MM-dd a hh:mm", Locale.KOREA);
         // SimpleDateFormat forecast = new SimpleDateFormat("MM.dd", Locale.KOREA);
 
         for (int a = 0; a < 27; a++) {
@@ -53,8 +51,8 @@ public class WeatherSync {
             // Common
             Long DTime = Long.parseLong(currentObject.getLong("dt")+"000");
     
-            Long SunriseJ = Long.parseLong(currentObject.getLong("sunrise")+"000");
-            Long SunsetJ = Long.parseLong(currentObject.getLong("sunset")+"000");
+            // Long SunriseJ = Long.parseLong(currentObject.getLong("sunrise")+"000");
+            // Long SunsetJ = Long.parseLong(currentObject.getLong("sunset")+"000");
 
             Long Sunrise = currentObject.getLong("sunrise");
             Long Sunset = currentObject.getLong("sunset");
@@ -66,7 +64,7 @@ public class WeatherSync {
             JSONObject warray = weatherarray.getJSONObject(0);
     
             String main = warray.getString("main");
-            String descript = warray.getString("description");
+            // String descript = warray.getString("description");
             String icon = warray.getString("icon");
     
             // Result Now -----------------------------------
@@ -79,6 +77,18 @@ public class WeatherSync {
             // System.out.println("현재날씨 : "+main);
             // System.out.println("날씨설명 : "+descript);
             // System.out.println("현재기호 : "+icon);
+
+            if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
+                JSONObject rain1h = currentObject.getJSONObject("rain");
+                double raindrop = rain1h.getDouble("1h");
+                System.out.println("강수량 : "+raindrop+"mm");
+            }
+    
+            if (main.equals("Snow")) {
+                JSONObject snow1h = currentObject.getJSONObject("snow");
+                double snowdrop = snow1h.getDouble("1h");
+                System.out.println("적설량 : "+snowdrop+"mm");
+            }
 
             vo.setSunrise(Sunrise);
             vo.setSunset(Sunset);
@@ -95,18 +105,18 @@ public class WeatherSync {
     
                 DTime = dailyObject.getLong("dt");
     
-                SunriseJ = Long.parseLong(dailyObject.getLong("sunrise")+"000");
-                SunsetJ = Long.parseLong(dailyObject.getLong("sunset")+"000");
+                // SunriseJ = Long.parseLong(dailyObject.getLong("sunrise")+"000");
+                // SunsetJ = Long.parseLong(dailyObject.getLong("sunset")+"000");
         
                 JSONObject tempObj = dailyObject.getJSONObject("temp");
     
-                Long dailyTempMin = tempObj.getLong("min");
-                Long dailyTempMax = tempObj.getLong("max");
+                // Long dailyTempMin = tempObj.getLong("min");
+                // Long dailyTempMax = tempObj.getLong("max");
     
-                Long dailyTempMorning = tempObj.getLong("morn");
+                // Long dailyTempMorning = tempObj.getLong("morn");
                 Long dailyTempDay = tempObj.getLong("day");
-                Long dailyTempEvening = tempObj.getLong("eve");
-                Long dailyTempNight = tempObj.getLong("night");
+                // Long dailyTempEvening = tempObj.getLong("eve");
+                // Long dailyTempNight = tempObj.getLong("night");
     
                 humidity = dailyObject.getLong("humidity");
         
@@ -114,7 +124,7 @@ public class WeatherSync {
                 warray = weatherarray.getJSONObject(0);
         
                 main = warray.getString("main");
-                descript = warray.getString("description");
+                // descript = warray.getString("description");
                 icon = warray.getString("icon");
     
                 // System.out.println("예보일자 : "+dtformat.format(DTime));
@@ -126,6 +136,16 @@ public class WeatherSync {
                 // System.out.println("현재날씨 : "+main);
                 // System.out.println("날씨설명 : "+descript);
                 // System.out.println("현재기호 : "+icon);
+
+                if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
+                    double raindrop = dailyObject.getDouble("rain");
+                    System.out.println("강수량 : "+raindrop+"mm");
+                }
+    
+                if (main.equals("Snow")) {
+                    double raindrop = dailyObject.getDouble("rain");
+                    System.out.println("적설량 : "+raindrop+"mm");
+                }
 
                 if (i == 1) {
                     vo.setTime1(DTime);
