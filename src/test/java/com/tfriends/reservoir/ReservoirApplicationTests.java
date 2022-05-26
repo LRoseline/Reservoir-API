@@ -77,11 +77,127 @@ class ReservoirApplicationTests {
 			System.out.println(vo.getLocation());
 		}
 	}
+
+    @Test
+    public void OneCallExtends() throws Exception {
+        SimpleDateFormat dtformat = new SimpleDateFormat("YYYY-MM-dd a hh:mm", Locale.KOREA);
+        double [] LatLon = {35.68106, 139.76720};
+
+        String OnecallURL = "http://api.openweathermap.org/data/2.5/onecall?&lang=kr&units=metric&lat="+LatLon[0]+"&lon="+LatLon[1]+"&appid="+this.Tricker(1);
+    
+        BufferedReader weatherbf;
+        URL urlweather = new URL(OnecallURL);
+        String weatherline = "";
+        String weatherresult = "";
+        SimpleDateFormat ForeTimeStamp = new SimpleDateFormat("a hh:mm", Locale.KOREA);
+        
+        weatherbf = new BufferedReader(new InputStreamReader(urlweather.openStream()));		
+        while((weatherline=weatherbf.readLine())!=null) {
+            weatherresult = weatherresult.concat(weatherline);
+        }
+
+        JSONObject weatherobj = new JSONObject(weatherresult);
+        
+        // Weather Area -----------------------------
+
+        // System.out.println(weatherobj);
+        JSONObject currentObject = weatherobj.getJSONObject("current");
+        
+        // Common
+        Long DTimeJ = Long.parseLong(currentObject.getLong("dt")+"000");
+
+        Long SunriseJ = Long.parseLong(currentObject.getLong("sunrise")+"000");
+        Long SunsetJ = Long.parseLong(currentObject.getLong("sunset")+"000");
+
+        Long Sunrise = currentObject.getLong("sunrise");
+        Long Sunset = currentObject.getLong("sunset");
+
+        Long temp = currentObject.getLong("temp");
+        Long humidity = currentObject.getLong("humidity");
+
+        JSONArray weatherarray = currentObject.getJSONArray("weather");
+        JSONObject warray = weatherarray.getJSONObject(0);
+
+        String main = warray.getString("main");
+        String descript = warray.getString("description");
+        String icon = warray.getString("icon");
+
+        // Result Now -----------------------------------
+
+        System.out.println("측정날짜 : "+dtformat.format(DTimeJ));
+        System.out.println("일출시간 : "+ForeTimeStamp.format(Sunrise));
+        System.out.println("일몰시간 : "+ForeTimeStamp.format(Sunset));
+        System.out.println("현재기온 : "+temp+"C");
+        System.out.println("현재습도 : "+humidity+"%");
+        System.out.println("현재날씨 : "+main);
+        System.out.println("날씨설명 : "+descript);
+        System.out.println("현재기호 : "+icon);
+
+        if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
+            JSONObject rain1h = currentObject.getJSONObject("rain");
+            double raindrop = rain1h.getDouble("1h");
+            System.out.println("강수량 : "+raindrop+"mm");
+        }
+
+        if (main.equals("Snow")) {
+            JSONObject snow1h = currentObject.getJSONObject("snow");
+            double snowdrop = snow1h.getDouble("1h");
+            System.out.println("적설량 : "+snowdrop+"mm");
+        }
+
+        // Daily Area
+        JSONArray dailyArray = weatherobj.getJSONArray("daily");
+        
+        for (int i = 0; i < 6; i++) {
+            JSONObject dailyObject = dailyArray.getJSONObject(i);
+
+            SunriseJ = Long.parseLong(dailyObject.getLong("sunrise")+"000");
+            SunsetJ = Long.parseLong(dailyObject.getLong("sunset")+"000");
+    
+            JSONObject tempObj = dailyObject.getJSONObject("temp");
+
+            Long dailyTempMin = tempObj.getLong("min");
+            Long dailyTempMax = tempObj.getLong("max");
+
+            Long dailyTempMorning = tempObj.getLong("morn");
+            Long dailyTempDay = tempObj.getLong("day");
+            Long dailyTempEvening = tempObj.getLong("eve");
+            Long dailyTempNight = tempObj.getLong("night");
+
+            humidity = dailyObject.getLong("humidity");
+    
+            weatherarray = dailyObject.getJSONArray("weather");
+            warray = weatherarray.getJSONObject(0);
+    
+            main = warray.getString("main");
+            descript = warray.getString("description");
+            icon = warray.getString("icon");
+
+            System.out.println("예보일자 : "+dtformat.format(DTimeJ));
+            System.out.println("일출시간 : "+ForeTimeStamp.format(SunriseJ));
+            System.out.println("일몰시간 : "+ForeTimeStamp.format(SunsetJ));
+            System.out.println("최저최고 : "+dailyTempMin+" ~ "+dailyTempMax);
+            System.out.println("기온변화 : "+dailyTempMorning+"=>"+dailyTempDay+"=>"+dailyTempEvening+"=>"+dailyTempNight);
+            System.out.println("현재습도 : "+humidity+"%");
+            System.out.println("현재날씨 : "+main);
+            System.out.println("날씨설명 : "+descript);
+            System.out.println("현재기호 : "+icon);
+
+            if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
+                double raindrop = currentObject.getLong("rain");
+                System.out.println("강수량 : "+raindrop);
+            }
+
+            if (main.equals("Snow")) {
+                double raindrop = currentObject.getLong("rain");
+                System.out.println("적설량 : "+raindrop);
+            }
+        }
+    }
 	
 	@Test
 	public void Onecall() throws Exception {
         SimpleDateFormat dtformat = new SimpleDateFormat("YYYY-MM-dd a hh:mm", Locale.KOREA);
-        SimpleDateFormat forecast = new SimpleDateFormat("MM.dd", Locale.KOREA);
 
         for (int a = 0; a < 27; a++) {
             WeatherVO vo = service.WeatherReady(a+1);
