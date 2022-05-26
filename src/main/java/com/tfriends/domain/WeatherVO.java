@@ -1,5 +1,7 @@
 package com.tfriends.domain;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -26,6 +28,8 @@ public class WeatherVO extends DustStationVO{
 	private String weather0;
 	private Long temp0;
 	private Long humid0;
+
+	private List<WeatherAPI> daily;
 	
 	private String weather1;
 	private Long temp1;
