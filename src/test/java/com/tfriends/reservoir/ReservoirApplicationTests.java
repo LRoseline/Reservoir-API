@@ -173,7 +173,7 @@ class ReservoirApplicationTests {
             descript = warray.getString("description");
             icon = warray.getString("icon");
 
-            System.out.println("예보일자 : "+dtformat.format(DTimeJ));
+            System.out.println("\n예보일자 : "+dtformat.format(DTimeJ));
             System.out.println("일출시간 : "+ForeTimeStamp.format(SunriseJ));
             System.out.println("일몰시간 : "+ForeTimeStamp.format(SunsetJ));
             System.out.println("최저최고 : "+dailyTempMin+" ~ "+dailyTempMax);
@@ -184,13 +184,13 @@ class ReservoirApplicationTests {
             System.out.println("현재기호 : "+icon);
 
             if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
-                double raindrop = currentObject.getLong("rain");
-                System.out.println("강수량 : "+raindrop);
+                double raindrop = dailyObject.getDouble("rain");
+                System.out.println("강수량 : "+raindrop+"mm");
             }
 
             if (main.equals("Snow")) {
-                double raindrop = currentObject.getLong("rain");
-                System.out.println("적설량 : "+raindrop);
+                double raindrop = dailyObject.getDouble("rain");
+                System.out.println("적설량 : "+raindrop+"mm");
             }
         }
     }
