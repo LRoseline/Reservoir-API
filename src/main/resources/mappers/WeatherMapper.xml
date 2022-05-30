@@ -38,6 +38,11 @@
 			time5 = #{time5}
 			where location = #{location}
 	</update>
+	<update id="newupdate">
+		UPDATE weather_${location} SET
+		
+		WHERE no = #{no}
+	</update>
 
 	<select id="stationno" resultType="DustStationVO">
 		SELECT * FROM dust_station WHERE no = #{no}
