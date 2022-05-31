@@ -478,4 +478,13 @@ class ReservoirApplicationTests {
             }
         }
     }
+
+    @Test
+    public void MigrationWeather () {
+        for (int i = 0; i < service.TownCount(); i++) {
+            LocationVO vo = service.LocationList(i+1);
+            service.WeatherMigrate(vo.getLocationen());
+            System.out.println(vo.getLocation()+" 지역 이동중..");
+        }
+    }
 }

@@ -8,7 +8,7 @@
 		SELECT COUNT(no) FROM dominications
 	</select>
 	<select id="locationinfo" resultType="LocationVO">
-		SELECT location, lat, lon FROM dominications where no = #{no}
+		SELECT location, locationen, lat, lon FROM dominications where no = #{no}
 	</select>
 	<select id="WeatherLoad" resultType="WeatherVO">
 		SELECT * FROM dominications
@@ -54,5 +54,13 @@
 			pm25v = #{pm25v},
 			pm25g = #{pm25g}
 		WHERE no = #{no}
+	</update>
+	<update id="migration">
+		create table asanweather.weather_${locationen}
+		(`no` INT(2) not NULL AUTO_INCREMENT,
+		`date` BIGINT not NULL, `weather` VARCHAR(3) NOT NULL,
+		`temp` DOUBLE not NULL, `humid` DOUBLE not null,
+		`time` BIGINT not NULL, `drop` DOUBLE not null,
+		PRIMARY KEY (`no`) USING BTREE)
 	</update>
 </mapper>

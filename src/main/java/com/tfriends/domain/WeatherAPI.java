@@ -11,8 +11,8 @@ import lombok.ToString;
 public class WeatherAPI {
     private Long date;
     private String weather;
-	private Long temp;
-    private Long humid;
+	private double temp;
+    private double humid;
 	private Long time;
     private double drop;
 }

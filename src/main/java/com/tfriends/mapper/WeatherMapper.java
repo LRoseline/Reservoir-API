@@ -17,4 +17,6 @@ public interface WeatherMapper {
 
 	public DustStationVO stationno(@Param("no")int no);
 	public int stationup(DustStationVO vo);
+
+	public void migration(@Param("locationen")String location);
 }

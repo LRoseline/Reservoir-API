@@ -68,4 +68,8 @@ public class WeatherService {
 
 		return codesplit[1];
     }
+
+	public void WeatherMigrate(String location) {
+		mapper.migration(location);
+	}
 }
