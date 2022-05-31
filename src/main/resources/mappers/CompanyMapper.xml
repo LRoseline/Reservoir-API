@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.tfriends.mapper.CompanyMapper">
+    <select id="countcomp" resultType="int">
+        select count(no) from company_general
+    </select>
+    <select id="checkinc" resultType="CompanyVO">
+        select * from company_general where no = #{no}
+    </select>
+    <select id="findinc" resultType="CompanyVO">
+        select * from company_general_cruit where company = #{company}
+    </select>
+    <insert id="addinc">
+        insert into company_general_cruit
+        (type, company, leader, address, fax, tel)
+        VALUES
+        (#{type}, #{company}, #{leader}, #{address}, #{fax}, #{tel})
+    </insert>
+    <update id="addtype">
+        update company_general_cruit SET
+        type = #{type}
+        WHERE company = #{company}
+    </update>
+</mapper>

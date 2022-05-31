@@ -16,9 +16,11 @@ import java.util.Locale;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import com.tfriends.domain.CompanyVO;
 import com.tfriends.domain.DustStationVO;
 import com.tfriends.domain.LocationVO;
 import com.tfriends.domain.WeatherVO;
+import com.tfriends.service.CompanyService;
 import com.tfriends.service.WeatherService;
 
 import org.json.*;
@@ -444,4 +446,36 @@ class ReservoirApplicationTests {
 			}
         }
 	}
+
+    @Autowired
+    private CompanyService coms;
+
+    @Test
+    public void CountInc() throws Exception {
+        System.out.println(coms.CompanyTotal());
+    }
+
+    @Test
+    public void CompanyInc() {
+        for (int i = 0; i < coms.CompanyTotal(); i++) {
+            CompanyVO vo = coms.IncCheck(i+1);
+            CompanyVO voII = new CompanyVO();
+            CompanyVO voFind = coms.IncFind(vo.getCompany());
+
+            
+            if (voFind == null) {
+                System.out.println("신규 회사 등록, "+vo.getCompany());
+                voII.setAddress(vo.getAddress());
+                voII.setCompany(vo.getCompany());
+                voII.setFax(vo.getFax());
+                voII.setLeader(vo.getLeader());
+                voII.setTel(vo.getTel());
+                voII.setType(vo.getType());
+                coms.IncAdd(voII);
+            } else {
+                voFind.setType(voFind.getType()+","+vo.getType());
+                coms.TypeAdd(voFind);
+            }
+        }
+    }
 }
