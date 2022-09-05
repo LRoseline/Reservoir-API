@@ -4,22 +4,22 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 <mapper namespace="com.tfriends.mapper.CompanyMapper">
     <select id="countcomp" resultType="int">
-        select count(no) from company_general
+        select count(no) from company_professional
     </select>
     <select id="checkinc" resultType="CompanyVO">
-        select * from company_general where no = #{no}
+        select * from company_professional where no = #{no}
     </select>
     <select id="findinc" resultType="CompanyVO">
-        select * from company_general_cruit where company = #{company}
+        select * from company_professional_result where company = #{company}
     </select>
     <insert id="addinc">
-        insert into company_general_cruit
+        insert into company_professional_result
         (type, company, leader, address, fax, tel)
         VALUES
         (#{type}, #{company}, #{leader}, #{address}, #{fax}, #{tel})
     </insert>
     <update id="addtype">
-        update company_general_cruit SET
+        update company_professional_result SET
         type = #{type}
         WHERE company = #{company}
     </update>

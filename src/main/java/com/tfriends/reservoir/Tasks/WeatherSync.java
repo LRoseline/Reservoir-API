@@ -144,9 +144,7 @@ public class WeatherSync {
                 if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
                     double raindrop = dailyObject.getDouble("rain");
                     System.out.println("강수량 : "+raindrop+"mm");
-                }
-    
-                if (main.equals("Snow")) {
+                } else if (main.equals("Snow")) {
                     double raindrop = dailyObject.getDouble("rain");
                     System.out.println("적설량 : "+raindrop+"mm");
                 }
