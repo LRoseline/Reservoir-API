@@ -23,5 +23,4 @@
         type = #{type}
         WHERE company = #{company}
     </update>
-    <select id="checkOS" resultType="int"
 </mapper>
