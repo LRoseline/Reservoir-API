@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 
 import com.tfriends.domain.DustStationVO;
 import com.tfriends.domain.WeatherVO;
+import com.tfriends.service.SettingService;
 import com.tfriends.service.WeatherService;
 
 import org.json.*;
@@ -20,6 +21,9 @@ public class WeatherSync {
     @Autowired
     private WeatherService service;
 
+    @Autowired
+    private SettingService setting;
+
     @Scheduled(cron = "5 1 * * * *")
     public void WeatherRain() throws Exception {
         // SimpleDateFormat dtformat = new SimpleDateFormat("YYYY-MM-dd a hh:mm", Locale.KOREA);
@@ -28,7 +32,7 @@ public class WeatherSync {
         for (int a = 0; a < 27; a++) {
             WeatherVO vo = service.WeatherReady(a+1);
     
-            String OnecallURL = "http://api.openweathermap.org/data/2.5/onecall?&lang=kr&units=metric&lat="+vo.getLat()+"&lon="+vo.getLon()+"&appid="+service.Tricker(1);
+            String OnecallURL = "http://api.openweathermap.org/data/2.5/onecall?&lang=kr&units=metric&lat="+vo.getLat()+"&lon="+vo.getLon()+"&appid="+setting.Tricker(1);
     
             BufferedReader weatherbf;
             URL urlweather = new URL(OnecallURL);
@@ -184,7 +188,7 @@ public class WeatherSync {
 		for (int d = 0; d < 7; d++) {
             DustStationVO vo = service.DustLoad(d+1);
 			String station = URLEncoder.encode(vo.getName(), "UTF-8");
-            String dustcom = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?returnType=json&numOfRows=1&pageNo=1&stationName="+station+"&dataTerm=DAILY&ver=1.0&serviceKey="+service.Tricker(3);
+            String dustcom = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?returnType=json&numOfRows=1&pageNo=1&stationName="+station+"&dataTerm=DAILY&ver=1.0&serviceKey="+setting.Tricker(3);
             URL urldust = new URL(dustcom);
             
             String dustline = "";
