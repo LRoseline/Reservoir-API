@@ -186,7 +186,7 @@ public class WeatherSync {
 		for (int d = 0; d < 7; d++) {
             DustStationVO vo = service.DustLoad(d+1);
 			String station = URLEncoder.encode(vo.getName(), "UTF-8");
-            String dustcom = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?returnType=json&numOfRows=1&pageNo=1&stationName="+station+"&dataTerm=DAILY&ver=1.0&serviceKey="+setting.SettingLoad("datagokr");
+            String dustcom = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?returnType=json&numOfRows=1&pageNo=1&stationName="+station+"&dataTerm=DAILY&ver=1.0&serviceKey="+URLEncoder.encode(setting.SettingLoad("datagokr").getValue(), "UTF-8");
             URL urldust = new URL(dustcom);
             
             String dustline = "";
