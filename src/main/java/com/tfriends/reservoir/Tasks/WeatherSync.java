@@ -32,7 +32,7 @@ public class WeatherSync {
         for (int a = 0; a < 27; a++) {
             WeatherVO vo = service.WeatherReady(a+1);
     
-            String OnecallURL = "http://api.openweathermap.org/data/2.5/onecall?&lang=kr&units=metric&lat="+vo.getLat()+"&lon="+vo.getLon()+"&appid="+setting.SettingLoad("openweathermap2");
+            String OnecallURL = "http://api.openweathermap.org/data/2.5/onecall?&lang=kr&units=metric&lat="+vo.getLat()+"&lon="+vo.getLon()+"&appid="+setting.SettingLoad("openweathermap2").getValue();
     
             BufferedReader weatherbf;
             URL urlweather = new URL(OnecallURL);
