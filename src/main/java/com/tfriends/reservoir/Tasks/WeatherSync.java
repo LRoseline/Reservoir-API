@@ -141,13 +141,17 @@ public class WeatherSync {
                 // System.out.println("날씨설명 : "+descript);
                 // System.out.println("현재기호 : "+icon);
 
+                double raindrop = 0;
+
                 if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
-                    double raindrop = dailyObject.getDouble("rain");
+                    raindrop = dailyObject.getDouble("rain");
                     System.out.println("강수량 : "+raindrop+"mm");
                 } else if (main.equals("Snow")) {
-                    double raindrop = dailyObject.getDouble("rain");
+                    raindrop = dailyObject.getDouble("rain");
                     System.out.println("적설량 : "+raindrop+"mm");
                 }
+                
+                vo.setDrop(raindrop);
 
                 if (i == 1) {
                     vo.setTime1(DTime);

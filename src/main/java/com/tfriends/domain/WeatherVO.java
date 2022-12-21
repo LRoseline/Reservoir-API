@@ -25,6 +25,8 @@ public class WeatherVO extends DustStationVO{
 	private Long sunrise;
 	private Long sunset;
 
+	private double drop;
+
 	private String weather0;
 	private Long temp0;
 	private Long humid0;
