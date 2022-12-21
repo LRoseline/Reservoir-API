@@ -147,7 +147,7 @@ public class WeatherSync {
                     raindrop = dailyObject.getDouble("rain");
                     System.out.println("강수량 : "+raindrop+"mm");
                 } else if (main.equals("Snow")) {
-                    double raindrop = dailyObject.getDouble("snow");
+                    raindrop = dailyObject.getDouble("snow");
                     System.out.println("적설량 : "+raindrop+"mm");
                 }
                 
