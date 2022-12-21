@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 
 import com.tfriends.domain.DustStationVO;
 import com.tfriends.domain.WeatherVO;
+import com.tfriends.exception.WeatherException;
 import com.tfriends.service.SettingService;
 import com.tfriends.service.WeatherService;
 
@@ -48,8 +49,6 @@ public class WeatherSync {
             JSONObject weatherobj = new JSONObject(weatherresult);
             
             // Weather Area -----------------------------
-    
-            // System.out.println(weatherobj);
             JSONObject currentObject = weatherobj.getJSONObject("current");
             
             // Common
@@ -70,29 +69,27 @@ public class WeatherSync {
             String main = warray.getString("main");
             // String descript = warray.getString("description");
             String icon = warray.getString("icon");
-    
-            // Result Now -----------------------------------
-    
-            // System.out.println("측정날짜 : "+dtformat.format(DTime));
-            // System.out.println("일출시간 : "+ForeTimeStamp.format(Sunrise));
-            // System.out.println("일몰시간 : "+ForeTimeStamp.format(Sunset));
-            // System.out.println("현재기온 : "+temp+"C");
-            // System.out.println("현재습도 : "+humidity+"%");
-            // System.out.println("현재날씨 : "+main);
-            // System.out.println("날씨설명 : "+descript);
-            // System.out.println("현재기호 : "+icon);
 
+            double raindrop = 0;
             if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
                 JSONObject rain1h = currentObject.getJSONObject("rain");
-                double raindrop = rain1h.getDouble("1h");
+                raindrop = rain1h.getDouble("1h");
                 System.out.println("강수량 : "+raindrop+"mm");
             }
     
             if (main.equals("Snow")) {
-                JSONObject snow1h = currentObject.getJSONObject("snow");
-                double snowdrop = snow1h.getDouble("1h");
-                System.out.println("적설량 : "+snowdrop+"mm");
+                try {
+                    JSONObject snow1h = currentObject.getJSONObject("snow");
+                    raindrop = snow1h.getDouble("1h");
+                    System.out.println("적설량 : "+raindrop+"mm");
+                } catch (WeatherException e) {
+                    JSONObject rain1h = currentObject.getJSONObject("rain");
+                    raindrop = rain1h.getDouble("1h");
+                    System.out.println("강수량 : "+raindrop+"mm");
+                }
             }
+
+            vo.setDrop(raindrop);
 
             vo.setSunrise(Sunrise);
             vo.setSunset(Sunset);
@@ -141,7 +138,7 @@ public class WeatherSync {
                 // System.out.println("날씨설명 : "+descript);
                 // System.out.println("현재기호 : "+icon);
 
-                double raindrop = 0;
+                raindrop = 0;
 
                 if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
                     raindrop = dailyObject.getDouble("rain");
@@ -151,32 +148,35 @@ public class WeatherSync {
                     System.out.println("적설량 : "+raindrop+"mm");
                 }
                 
-                vo.setDrop(raindrop);
-
                 if (i == 1) {
                     vo.setTime1(DTime);
                     vo.setWeather1(icon);
                     vo.setTemp1(dailyTempDay);
+                    vo.setDrop1(raindrop);
                 }
                 if (i == 2) {
                     vo.setTime2(DTime);
                     vo.setWeather2(icon);
                     vo.setTemp2(dailyTempDay);
+                    vo.setDrop2(raindrop);
                 }
                 if (i == 3) {
                     vo.setTime3(DTime);
                     vo.setWeather3(icon);
                     vo.setTemp3(dailyTempDay);
+                    vo.setDrop3(raindrop);
                 }
                 if (i == 4) {
                     vo.setTime4(DTime);
                     vo.setWeather4(icon);
                     vo.setTemp4(dailyTempDay);
+                    vo.setDrop4(raindrop);
                 }
                 if (i == 5) {
                     vo.setTime5(DTime);
                     vo.setWeather5(icon);
                     vo.setTemp5(dailyTempDay);
+                    vo.setDrop5(raindrop);
                 }
             }
             service.WUpdate(vo);
