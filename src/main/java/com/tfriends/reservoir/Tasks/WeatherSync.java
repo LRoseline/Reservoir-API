@@ -30,7 +30,8 @@ public class WeatherSync {
         // SimpleDateFormat dtformat = new SimpleDateFormat("YYYY-MM-dd a hh:mm", Locale.KOREA);
         // SimpleDateFormat forecast = new SimpleDateFormat("MM.dd", Locale.KOREA);
 
-        for (int a = 0; a < 27; a++) {
+        // for (int a = 0; a < 27; a++) {
+            int a = 11;
             WeatherVO vo = service.WeatherReady(a+1);
     
             String OnecallURL = "http://api.openweathermap.org/data/2.5/onecall?&lang=kr&units=metric&lat="+vo.getLat()+"&lon="+vo.getLon()+"&appid="+setting.SettingLoad("openweathermap2").getValue();
@@ -181,7 +182,7 @@ public class WeatherSync {
             }
             service.WUpdate(vo);
             weatherbf.close();
-        }
+        // }
         System.out.println("날씨정보 업데이트");
     }
 
