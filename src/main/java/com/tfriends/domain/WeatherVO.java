@@ -15,6 +15,9 @@ public class WeatherVO extends DustStationVO {
 	private String location;
 
 	@JsonIgnore
+	private String type;
+
+	@JsonIgnore
 	private String locationen;
 
 	private double lat;
