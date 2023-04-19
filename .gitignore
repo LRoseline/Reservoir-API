@@ -36,3 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 gradle/wrapper/gradle-7.4.1-bin.zip
+gradle/wrapper/gradle-7.4.2-bin.zip
+gradle/wrapper/gradle-wrapper.properties
+gradle/wrapper/gradle-7.6-bin.zip

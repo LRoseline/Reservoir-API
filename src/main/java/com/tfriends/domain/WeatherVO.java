@@ -1,5 +1,7 @@
 package com.tfriends.domain;
 
+import java.sql.Date;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -7,10 +9,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class WeatherVO extends DustStationVO{
+public class WeatherVO extends DustStationVO {
 	private int no;
 
-    private String location;
+	private String location;
+
+	@JsonIgnore
+	private String type;
 
 	@JsonIgnore
 	private String locationen;
@@ -28,7 +33,7 @@ public class WeatherVO extends DustStationVO{
 	private String weather0;
 	private Long temp0;
 	private Long humid0;
-	
+
 	private String weather1;
 	private double drop1;
 	private Long temp1;
@@ -53,4 +58,6 @@ public class WeatherVO extends DustStationVO{
 	private double drop5;
 	private Long temp5;
 	private Long time5;
+
+	private Date latest;
 }
