@@ -13,6 +13,7 @@ import com.tfriends.service.WeatherService;
 
 import org.json.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 
 public class WeatherSync {
 
@@ -22,13 +23,12 @@ public class WeatherSync {
     @Autowired
     private SettingService setting;
 
-    @Scheduled(cron = "5 1 * * * *")
+    @Scheduled(cron = "5 1 9-22,0 * * *")
     public void WeatherRain() throws Exception {
         // SimpleDateFormat dtformat = new SimpleDateFormat("YYYY-MM-dd a hh:mm", Locale.KOREA);
         // SimpleDateFormat forecast = new SimpleDateFormat("MM.dd", Locale.KOREA);
 
-        // for (int a = 0; a < 27; a++) {
-            int a = 11;
+        for (int a = 0; a < 27; a++) {
             WeatherVO vo = service.WeatherReady(a+1);
     
             String OnecallURL = "http://api.openweathermap.org/data/2.5/onecall?&lang=kr&units=metric&lat="+vo.getLat()+"&lon="+vo.getLon()+"&appid="+setting.SettingLoad("openweathermap2").getValue();
@@ -180,11 +180,11 @@ public class WeatherSync {
             }
             service.WUpdate(vo);
             weatherbf.close();
-        // }
+        }
         System.out.println("날씨정보 업데이트");
     }
 
-    @Scheduled(cron = "5 3 * * * *")
+    @Scheduled(cron = "5 3 9-22,0 * * *")
     public void DustStation() throws Exception {
         for (int d = 0; d < 7; d++) {
             DustStationVO vo = service.DustLoad(d + 1);
