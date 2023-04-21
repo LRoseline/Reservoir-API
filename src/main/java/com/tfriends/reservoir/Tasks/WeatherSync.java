@@ -14,7 +14,9 @@ import com.tfriends.service.WeatherService;
 import org.json.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WeatherSync {
 
     @Autowired
@@ -25,128 +27,132 @@ public class WeatherSync {
 
     @Scheduled(cron = "5 1 9-22,0 * * *")
     public void WeatherRain() throws Exception {
-        // SimpleDateFormat dtformat = new SimpleDateFormat("YYYY-MM-dd a hh:mm", Locale.KOREA);
+        // SimpleDateFormat dtformat = new SimpleDateFormat("YYYY-MM-dd a hh:mm",
+        // Locale.KOREA);
         // SimpleDateFormat forecast = new SimpleDateFormat("MM.dd", Locale.KOREA);
 
         for (int a = 0; a < 27; a++) {
-            WeatherVO vo = service.WeatherReady(a+1);
-    
-            String OnecallURL = "http://api.openweathermap.org/data/2.5/onecall?&lang=kr&units=metric&lat="+vo.getLat()+"&lon="+vo.getLon()+"&appid="+setting.SettingLoad("openweathermap2").getValue();
-    
+            WeatherVO vo = service.WeatherReady(a + 1);
+
+            String OnecallURL = "http://api.openweathermap.org/data/2.5/onecall?&lang=kr&units=metric&lat="
+                    + vo.getLat() + "&lon=" + vo.getLon() + "&appid="
+                    + setting.SettingLoad("openweathermap2").getValue();
+
             BufferedReader weatherbf;
             URL urlweather = new URL(OnecallURL);
             String weatherline = "";
             String weatherresult = "";
-            // SimpleDateFormat ForeTimeStamp = new SimpleDateFormat("a hh:mm", Locale.KOREA);
-            
-            weatherbf = new BufferedReader(new InputStreamReader(urlweather.openStream()));		
-            while((weatherline=weatherbf.readLine())!=null) {
+            // SimpleDateFormat ForeTimeStamp = new SimpleDateFormat("a hh:mm",
+            // Locale.KOREA);
+
+            weatherbf = new BufferedReader(new InputStreamReader(urlweather.openStream()));
+            while ((weatherline = weatherbf.readLine()) != null) {
                 weatherresult = weatherresult.concat(weatherline);
             }
-    
+
             JSONObject weatherobj = new JSONObject(weatherresult);
-            
+
             // Weather Area -----------------------------
             JSONObject currentObject = weatherobj.getJSONObject("current");
-            
+
             // Common
-            Long DTime = Long.parseLong(currentObject.getLong("dt")+"000");
-    
+            Long DTime = Long.parseLong(currentObject.getLong("dt") + "000");
+
             // Long SunriseJ = Long.parseLong(currentObject.getLong("sunrise")+"000");
             // Long SunsetJ = Long.parseLong(currentObject.getLong("sunset")+"000");
 
-        Long Sunrise = currentObject.getLong("sunrise");
-        Long Sunset = currentObject.getLong("sunset");
+            Long Sunrise = currentObject.getLong("sunrise");
+            Long Sunset = currentObject.getLong("sunset");
 
-        Long temp = currentObject.getLong("temp");
-        Long humidity = currentObject.getLong("humidity");
+            Long temp = currentObject.getLong("temp");
+            Long humidity = currentObject.getLong("humidity");
 
-        JSONArray weatherarray = currentObject.getJSONArray("weather");
-        JSONObject warray = weatherarray.getJSONObject(0);
+            JSONArray weatherarray = currentObject.getJSONArray("weather");
+            JSONObject warray = weatherarray.getJSONObject(0);
 
-        String main = warray.getString("main");
-        // String descript = warray.getString("description");
-        String icon = warray.getString("icon");
+            String main = warray.getString("main");
+            // String descript = warray.getString("description");
+            String icon = warray.getString("icon");
 
-        double raindrop = 0;
-        if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
-            JSONObject rain1h = currentObject.getJSONObject("rain");
-            raindrop = rain1h.getDouble("1h");
-            System.out.println("강수량 : " + raindrop + "mm");
-        }
-
-        if (main.equals("Snow")) {
-            try {
-                JSONObject snow1h = currentObject.getJSONObject("snow");
-                raindrop = snow1h.getDouble("1h");
-                System.out.println("적설량 : " + raindrop + "mm");
-            } catch (WeatherException e) {
+            double raindrop = 0;
+            if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
                 JSONObject rain1h = currentObject.getJSONObject("rain");
                 raindrop = rain1h.getDouble("1h");
                 System.out.println("강수량 : " + raindrop + "mm");
             }
-        }
 
-        vo.setDrop(raindrop);
+            if (main.equals("Snow")) {
+                try {
+                    JSONObject snow1h = currentObject.getJSONObject("snow");
+                    raindrop = snow1h.getDouble("1h");
+                    System.out.println("적설량 : " + raindrop + "mm");
+                } catch (WeatherException e) {
+                    JSONObject rain1h = currentObject.getJSONObject("rain");
+                    raindrop = rain1h.getDouble("1h");
+                    System.out.println("강수량 : " + raindrop + "mm");
+                }
+            }
 
-        vo.setSunrise(Sunrise);
-        vo.setSunset(Sunset);
+            vo.setDrop(raindrop);
 
-        vo.setWeather0(icon);
-        vo.setTemp0(temp);
-        vo.setHumid0(humidity);
+            vo.setSunrise(Sunrise);
+            vo.setSunset(Sunset);
 
-        // Daily Area
-        JSONArray dailyArray = weatherobj.getJSONArray("daily");
+            vo.setWeather0(icon);
+            vo.setTemp0(temp);
+            vo.setHumid0(humidity);
 
-        for (int i = 0; i < 6; i++) {
-            JSONObject dailyObject = dailyArray.getJSONObject(i);
+            // Daily Area
+            JSONArray dailyArray = weatherobj.getJSONArray("daily");
 
-            DTime = dailyObject.getLong("dt");
+            for (int i = 0; i < 6; i++) {
+                JSONObject dailyObject = dailyArray.getJSONObject(i);
 
-            // SunriseJ = Long.parseLong(dailyObject.getLong("sunrise")+"000");
-            // SunsetJ = Long.parseLong(dailyObject.getLong("sunset")+"000");
+                DTime = dailyObject.getLong("dt");
 
-            JSONObject tempObj = dailyObject.getJSONObject("temp");
+                // SunriseJ = Long.parseLong(dailyObject.getLong("sunrise")+"000");
+                // SunsetJ = Long.parseLong(dailyObject.getLong("sunset")+"000");
 
-            // Long dailyTempMin = tempObj.getLong("min");
-            // Long dailyTempMax = tempObj.getLong("max");
+                JSONObject tempObj = dailyObject.getJSONObject("temp");
 
-            // Long dailyTempMorning = tempObj.getLong("morn");
-            Long dailyTempDay = tempObj.getLong("day");
-            // Long dailyTempEvening = tempObj.getLong("eve");
-            // Long dailyTempNight = tempObj.getLong("night");
+                // Long dailyTempMin = tempObj.getLong("min");
+                // Long dailyTempMax = tempObj.getLong("max");
 
-            humidity = dailyObject.getLong("humidity");
+                // Long dailyTempMorning = tempObj.getLong("morn");
+                Long dailyTempDay = tempObj.getLong("day");
+                // Long dailyTempEvening = tempObj.getLong("eve");
+                // Long dailyTempNight = tempObj.getLong("night");
 
-            weatherarray = dailyObject.getJSONArray("weather");
-            warray = weatherarray.getJSONObject(0);
+                humidity = dailyObject.getLong("humidity");
 
-            main = warray.getString("main");
-            // descript = warray.getString("description");
-            icon = warray.getString("icon");
+                weatherarray = dailyObject.getJSONArray("weather");
+                warray = weatherarray.getJSONObject(0);
 
-            // System.out.println("예보일자 : "+dtformat.format(DTime));
-            // System.out.println("일출시간 : "+ForeTimeStamp.format(SunriseJ));
-            // System.out.println("일몰시간 : "+ForeTimeStamp.format(SunsetJ));
-            // System.out.println("최저최고 : "+dailyTempMin+" ~ "+dailyTempMax);
-            // System.out.println("기온변화 :
-            // "+dailyTempMorning+"=>"+dailyTempDay+"=>"+dailyTempEvening+"=>"+dailyTempNight);
-            // System.out.println("현재습도 : "+humidity+"%");
-            // System.out.println("현재날씨 : "+main);
-            // System.out.println("날씨설명 : "+descript);
-            // System.out.println("현재기호 : "+icon);
+                main = warray.getString("main");
+                // descript = warray.getString("description");
+                icon = warray.getString("icon");
 
-            raindrop = 0;
+                // System.out.println("예보일자 : "+dtformat.format(DTime));
+                // System.out.println("일출시간 : "+ForeTimeStamp.format(SunriseJ));
+                // System.out.println("일몰시간 : "+ForeTimeStamp.format(SunsetJ));
+                // System.out.println("최저최고 : "+dailyTempMin+" ~ "+dailyTempMax);
+                // System.out.println("기온변화 :
+                // "+dailyTempMorning+"=>"+dailyTempDay+"=>"+dailyTempEvening+"=>"+dailyTempNight);
+                // System.out.println("현재습도 : "+humidity+"%");
+                // System.out.println("현재날씨 : "+main);
+                // System.out.println("날씨설명 : "+descript);
+                // System.out.println("현재기호 : "+icon);
+
+                raindrop = 0;
 
                 if (main.equals("Thunderstorm") || main.equals("Drizzle") || main.equals("Rain")) {
                     raindrop = dailyObject.getDouble("rain");
-                    System.out.println("강수량 : "+raindrop+"mm");
+                    System.out.println("강수량 : " + raindrop + "mm");
                 } else if (main.equals("Snow")) {
                     raindrop = dailyObject.getDouble("snow");
-                    System.out.println("적설량 : "+raindrop+"mm");
+                    System.out.println("적설량 : " + raindrop + "mm");
                 }
-                
+
                 if (i == 1) {
                     vo.setTime1(DTime);
                     vo.setWeather1(icon);
