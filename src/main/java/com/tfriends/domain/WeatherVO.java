@@ -1,7 +1,5 @@
 package com.tfriends.domain;
 
-import java.sql.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -58,6 +56,4 @@ public class WeatherVO extends DustStationVO {
 	private double drop5;
 	private Long temp5;
 	private Long time5;
-
-	private Date latest;
 }
